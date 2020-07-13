@@ -2,13 +2,32 @@
 
 namespace App;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
     use Notifiable;
+
+    public function courses()
+    {
+        return $this->belongsToMany('App\Course');
+    }
+
+    public function exams()
+    {
+        return $this->belongsToMany('App\Exam')->withPivot('stage_number');;
+    }
+
+    public function answers()
+    {
+        return $this->belongsToMany('App\Answer');
+    }
+
+    public function menus()
+    {
+        return $this->hasMany('App\Menu', 'role', 'role');
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -16,7 +35,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'google_id'
     ];
 
     /**
